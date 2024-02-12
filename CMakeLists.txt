@@ -15,12 +15,14 @@ project(webserv)
 add_library(webserv
 ./webserv/src/Logger.cpp)
 target_include_directories(webserv PRIVATE ./webserv/includes/)
+target_compile_options(webserv PRIVATE -Wall -Wextra -Wpedantic -std=c++98 -g)
 
 enable_testing()
 
 add_executable(WebTests ./tests/LoggerTests.cpp)
 target_link_libraries(WebTests webserv gtest gtest_main)
 add_dependencies(WebTests webserv)
+target_compile_options(WebTests PRIVATE -Wall -Wextra -Wpedantic -std=c++20 -g)
 
 include(GoogleTest)
 gtest_discover_tests(WebTests)
