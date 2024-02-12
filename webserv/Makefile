@@ -1,12 +1,12 @@
 NAME=a.out
 
 CXX = clang++
-CXXFLAGS = -Wall -Wextra -Wpedantic -pedantic-errors -Wno-newline-eof -g -std=c++98
+CXXFLAGS = -Wall -Wextra -Wpedantic -pedantic-errors -Wno-newline-eof -g -std=c++98 -I./includes
 LDFLAGS =-fsanitize=address -fsanitize=undefined
 
-FILES = main.cpp
+FILES = main.cpp Logger.cpp
 
-VPATH = ./src
+VPATH = ./src/
 
 OUTPUTDIR = ./bin
 
@@ -31,6 +31,6 @@ fclean: clean
 re: fclean all
 
 syntax:
-	$(CXX) -fsyntax-only -I./libft/ -Weverything -Wno-newline-eof -Wno-padded $(FILES)
+	$(CXX) -fsyntax-only -I./includes/ -Weverything -Wno-newline-eof -Wno-padded $(FILES:%=./src/%)
 
 .PHONEY: fclean clean all re syntax
