@@ -1,6 +1,7 @@
 #include "Logger.hpp"
 
 #include "ColourCodes.hpp"
+#include "itos.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -49,9 +50,11 @@ std::string Logger::generateTimestamp()
 {
         const std::time_t time = std::time(NULL);
         std::tm *local = std::localtime(&time);
-        std::stringstream output;
-        output << std::put_time(local, "%Y-%b-%e %H:%M:%S");
-        return output.str();
+        std::string output;
+        output = itos(1900 + local->tm_year) + "-" + itos(local->tm_mon + 1);
+        output += "-" + itos(local->tm_mday) + " " + itos(local->tm_hour) + ":";
+        output += itos(local->tm_min) + ":" + itos(local->tm_sec);
+        return output;
 }
 
 void Logger::write(reportLevel level, std::string levelColor, std::string message)
