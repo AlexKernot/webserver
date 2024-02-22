@@ -14,7 +14,7 @@ FetchContent_MakeAvailable(googletest)
 project(webserv)
 add_library(webserv
 ./webserv/src/Logger.cpp ./webserv/src/itos.cpp ./webserv/src/HttpFactory.cpp 
-./webserv/src/Ahttp.cpp ./webserv/src/HttpRequest.cpp 
+./webserv/src/Ahttp.cpp ./webserv/src/AHttpRequest.cpp
 ./webserv/src/HttpResponse.cpp ./webserv/src/HttpHeaders.cpp)
 target_include_directories(webserv PRIVATE ./webserv/includes/)
 target_compile_options(webserv PRIVATE -Wall -Wextra -Wpedantic -std=c++98 -g)
@@ -36,8 +36,26 @@ target_link_libraries(httpFactoryTests webserv gtest gtest_main)
 add_dependencies(httpFactoryTests webserv)
 target_compile_options(httpFactoryTests PRIVATE -Wall -Wextra -Wpedantic -std=c++20 -g)
 
+add_executable(AhttpTests ./tests/AhttpTests.cpp)
+target_link_libraries(AhttpTests webserv gtest gtest_main)
+add_dependencies(AhttpTests webserv)
+target_compile_options(AhttpTests PRIVATE -Wall -Wextra -Wpedantic -std=c++20 -g)
+
+add_executable(itosTests ./tests/itosTests.cpp)
+target_link_libraries(itosTests webserv gtest gtest_main)
+add_dependencies(itosTests webserv)
+target_compile_options(itosTests PRIVATE -Wall -Wextra -Wpedantic -std=c++20 -g)
+
+add_executable(HttpResponseTests ./tests/HttpResponseTests.cpp)
+target_link_libraries(HttpResponseTests webserv gtest gtest_main)
+add_dependencies(HttpResponseTests webserv)
+target_compile_options(HttpResponseTests PRIVATE -Wall -Wextra -Wpedantic -std=c++20 -g)
+
 
 include(GoogleTest)
 gtest_discover_tests(WebTests)
 gtest_discover_tests(headerTests)
 gtest_discover_tests(httpFactoryTests)
+gtest_discover_tests(AhttpTests)
+gtest_discover_tests(itosTests)
+gtest_discover_tests(HttpResponseTests)
