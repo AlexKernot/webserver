@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   AhttpTests.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akernot <akernot@student.42Adel.org.au>    +#+  +:+       +#+        */
+/*   By: akernot <a1885158@adelaide.edu.au>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 17:37:50 by akernot           #+#    #+#             */
-/*   Updated: 2024/02/22 18:00:47 by akernot          ###   ########.fr       */
+/*   Updated: 2024/03/18 16:50:11 by akernot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <gtest/gtest.h>
 
 #include "../webserv/includes/Ahttp.hpp"
+
+#include <stdio.h>
 
 class ConcreteHttp : public Ahttp {
 public:
@@ -57,7 +59,43 @@ TEST(AhttpTests, BasicTests)
 	http->setEndl("\r");
 	ASSERT_EQ(http->getEndl(), "\r");
 
-	
 	delete http;
 	delete http2;
+}
+
+TEST(AhttpTests, BodyTests)
+{
+	Ahttp *http = new ConcreteHttp();
+	FILE *file = tmpfile();
+	// Ensure file is actually open
+	ASSERT_NE((void *)file, (void *)0);
+	
+	// Make sure body is empty
+	ASSERT_EQ(http->getBodySize(), 0);
+	ASSERT_EQ(http->getMessageBody(), "");
+	std::string message = "Testing";
+	ASSERT_EQ(write(file->_fileno, message.c_str(), message.size()), message.size());
+
+	// Set file position pointer to beginning of temp file
+	rewind(file);
+	// Try reading into body
+	http->readBody(file->_fileno);
+	ASSERT_EQ(http->getBodySize(), message.size());
+	ASSERT_EQ(http->getMessageBody(), message);
+
+	http->setMessageBody("");
+	// Try reading from an invalid fd
+	ASSERT_NO_FATAL_FAILURE(http->readBody(100));
+	ASSERT_EQ(http->getMessageBody(), "");
+	int fds[2];
+	ASSERT_EQ(pipe(fds), 0);
+	// Try reading from the write end of a pipe
+	ASSERT_NO_FATAL_FAILURE(http->readBody(fds[1]));
+	ASSERT_EQ(http->getMessageBody(), "");
+	close(fds[0]);
+	close(fds[1]);
+	// Try reading from a closed fd
+	ASSERT_NO_FATAL_FAILURE(http->readBody(fds[0]));
+	ASSERT_EQ(http->getMessageBody(), "");
+	delete http;
 }

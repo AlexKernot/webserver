@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Ahttp.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akernot <akernot@student.42Adel.org.au>    +#+  +:+       +#+        */
+/*   By: akernot <a1885158@adelaide.edu.au>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 16:04:46 by akernot           #+#    #+#             */
-/*   Updated: 2024/02/22 18:02:18 by akernot          ###   ########.fr       */
+/*   Updated: 2024/03/18 16:48:11 by akernot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,25 @@ std::string Ahttp::getEndl() const
 void Ahttp::setEndl(std::string endl)
 {
         encoding = endl;
+}
+
+int Ahttp::getBodySize() const
+{
+        return messageBody.size();
+}
+
+void Ahttp::readBody(const int fd)
+{
+        static const int bufferSize = 1028;
+        char *buffer = new char[bufferSize];
+
+        while (true) {
+                int bytesRead = read(fd, buffer, bufferSize);
+                if (bytesRead == -1)
+                        break;
+                messageBody += buffer;
+                if (bytesRead < bufferSize)
+                        break;
+        }
+        delete[] buffer;
 }
