@@ -84,8 +84,6 @@ void Logger::write(reportLevel level, std::string levelColor, std::string messag
         case level_fatal:
                 stream << color << "  [FATAL]: ";
                 break;
-        default:
-                stream << "An unknown error was logged: ";
         }
         stream << message;
         if (color != "")

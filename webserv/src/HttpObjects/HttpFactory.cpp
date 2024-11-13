@@ -3,14 +3,79 @@
 /*                                                        :::      ::::::::   */
 /*   HttpFactory.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akernot <akernot@student.42Adel.org.au>    +#+  +:+       +#+        */
+/*   By: akernot <a1885158@adelaide.edu.au>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:55:41 by akernot           #+#    #+#             */
-/*   Updated: 2024/02/17 18:06:13 by akernot          ###   ########.fr       */
+/*   Updated: 2024/03/18 22:17:52 by akernot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "HttpFactory.hpp"
+
+#include "HttpResponse.hpp"
+#include "Config.hpp"
+
+std::string *HttpFactory::emergencyErrorString = NULL;
+
+std::string HttpFactory::getWebserverVersion()
+{
+        return "Webserv/0.1";
+}
+
+std::string *HttpFactory::outOfMemory()
+{
+	return emergencyErrorString;
+}
+
+void HttpFactory::initEmergencyMemory()
+{
+	emergencyErrorString = new std::string();
+	*emergencyErrorString = "Http/1.1 503 Service Unavailable\n";
+	*emergencyErrorString += "Retry-After: 120\n";
+	*emergencyErrorString += "Server: " + getWebserverVersion() + "\n";
+}
+
+HttpResponse *HttpFactory::createError(int fd, int code)
+{
+	HttpResponse *retval = new HttpResponse(fd);
+        retval->setStatusCode(404);
+	retval->setHeader("Server", getWebserverVersion());
+	return retval;
+}
+
+Ahttp *HttpFactory::create404(int fd)
+{
+        return createError(fd, 404);
+}
+
+Ahttp *HttpFactory::create405(int fd, int allowedMethods)
+{
+        HttpResponse *retval = createError(fd, 405);
+        std::string allowed;
+        if (allowedMethods & Config::GET)
+                allowed += "GET, ";
+        if (allowedMethods & Config::HEAD)
+                allowed += "HEAD, ";
+        if (allowedMethods & Config::POST)
+                allowed += "POST, ";
+        if (allowedMethods & Config::DELETE)
+                allowed += "DELETE, ";
+        if (allowedMethods & Config::CONNECT)
+                allowed += "CONNECT, ";
+        if (allowedMethods & Config::OPTIONS)
+                allowed += "OPTIONS, ";
+        if (allowedMethods & Config::TRACE)
+                allowed += "TRACE, ";
+        allowed.resize(allowed.size() - 2);
+        
+        retval->setHeader("Allow", allowed);
+        return retval;
+}
+
+Ahttp *HttpFactory::create403(int fd)
+{
+	return createError(fd, 403);
+}
 
 // * If somebody knows an alternative to an 80 line switch statement
 // * please please please reach out and let me know. I don't like this

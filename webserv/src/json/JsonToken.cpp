@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   JsonToken.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akernot <a1885158@adelaide.edu.au>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/12 17:14:24 by akernot           #+#    #+#             */
-/*   Updated: 2024/03/18 20:50:00 by akernot          ###   ########.fr       */
+/*   Created: 2024/06/07 17:48:37 by akernot           #+#    #+#             */
+/*   Updated: 2024/06/08 19:14:21 by akernot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
+#include "json/JsonToken.hpp"
+#include "json/JsonExceptions.hpp"
 
-#include "WebserverInstance.hpp"
-
-int main()
+JsonToken::JsonToken()
 {
-	char *emergencyMemory = new char[1028];
-	try {
-		WebserverInstance webserver;
-		webserver.start();
-	} catch (std::bad_alloc&) {
-		delete[] emergencyMemory;
-		std::cerr << "Webserver did not have enough memory to start.\n";
-		return 0;
-	}
-	delete[] emergencyMemory;
-	return 0;
+	this->key = "";
+}
+
+JsonToken::JsonToken(std::string key)
+{
+	this->key = key;
+}
+
+std::string JsonToken::getKey() const
+{
+	return key;
 }

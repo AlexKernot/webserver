@@ -6,7 +6,7 @@
 /*   By: akernot <a1885158@adelaide.edu.au>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 16:04:46 by akernot           #+#    #+#             */
-/*   Updated: 2024/03/18 16:48:11 by akernot          ###   ########.fr       */
+/*   Updated: 2024/03/18 17:34:38 by akernot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,13 @@ void Ahttp::readBody(const int fd)
                         break;
         }
         delete[] buffer;
+}
+
+void Ahttp::readBody(std::istream& file)
+{
+        while (file.eof() == false) {
+                std::string line;
+                file >> line;
+                messageBody += line;
+        }
 }

@@ -11,11 +11,20 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
+project(json)
+add_library(json
+./webserv/src/Logger.cpp ./webserv/src/json/AJsonToken.cpp ./webserv/src/json/JsonExceptions.cpp
+./webserv/src/json/JsonReader.cpp ./webserv/src/json/JsonValue.cpp ./webserv/src/json/JsonArray.cpp
+./webserv/src/json/JsonObject.cpp)
+target_include_directories(json PRIVATE ./webserv/includes/)
+target_compile_options(json PRIVATE -Wall -Wextra -Wpedantic -std=c++98 -g)
+
 project(webserv)
 add_library(webserv
 ./webserv/src/Logger.cpp ./webserv/src/itos.cpp ./webserv/src/HttpFactory.cpp 
 ./webserv/src/Ahttp.cpp ./webserv/src/AHttpRequest.cpp
 ./webserv/src/HttpResponse.cpp ./webserv/src/HttpHeaders.cpp)
+add_dependencies(webserv, json)
 target_include_directories(webserv PRIVATE ./webserv/includes/)
 target_compile_options(webserv PRIVATE -Wall -Wextra -Wpedantic -std=c++98 -g)
 
@@ -51,6 +60,16 @@ target_link_libraries(HttpResponseTests webserv gtest gtest_main)
 add_dependencies(HttpResponseTests webserv)
 target_compile_options(HttpResponseTests PRIVATE -Wall -Wextra -Wpedantic -std=c++20 -g)
 
+add_executable(JsonTokensTests ./tests/JsonTokensTests.cpp)
+target_link_libraries(JsonTokensTests webserv gtest gtest_main)
+add_dependencies(JsonTokensTests json)
+target_compile_options(JsonTokensTests PRIVATE -Wall -Wextra -Wpedantic -std=c++20 -g)
+
+add_executable(JsonReaderTests ./tests/JsonReaderTests.cpp)
+target_link_libraries(JsonReaderTests webserv gtest gtest_main)
+add_dependencies(JsonReaderTests json)
+target_compile_options(JsonReaderTests PRIVATE -Wall -Wextra -Wpedantic -std=c++20 -g)
+
 
 include(GoogleTest)
 gtest_discover_tests(WebTests)
@@ -59,3 +78,5 @@ gtest_discover_tests(httpFactoryTests)
 gtest_discover_tests(AhttpTests)
 gtest_discover_tests(itosTests)
 gtest_discover_tests(HttpResponseTests)
+gtest_discover_tests(JsonTokensTests)
+gtest_discover_tests(JsonReaderTests)

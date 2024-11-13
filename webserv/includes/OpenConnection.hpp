@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   OpenConnection.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akernot <a1885158@adelaide.edu.au>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/12 17:14:24 by akernot           #+#    #+#             */
-/*   Updated: 2024/03/18 20:50:00 by akernot          ###   ########.fr       */
+/*   Created: 2024/03/11 20:36:15 by akernot           #+#    #+#             */
+/*   Updated: 2024/03/18 18:00:30 by akernot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
+#include "FdStream.hpp"
+#include "Ahttp.hpp"
+#include "AHttpRequest.hpp"
 
-#include "WebserverInstance.hpp"
+class OpenConnection : public FdStream {
+public:
+	OpenConnection(int fd);
+	void sendResponse(Ahttp* response);
+	AHttpRequest* receiveRequest();
+	void reject();
+	~OpenConnection();
 
-int main()
-{
-	char *emergencyMemory = new char[1028];
-	try {
-		WebserverInstance webserver;
-		webserver.start();
-	} catch (std::bad_alloc&) {
-		delete[] emergencyMemory;
-		std::cerr << "Webserver did not have enough memory to start.\n";
-		return 0;
-	}
-	delete[] emergencyMemory;
-	return 0;
+private:
+	int fd;
+
+	OpenConnection();
+	OpenConnection(const OpenConnection&);
+	OpenConnection& operator=(const OpenConnection&);
 }

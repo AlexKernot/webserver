@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Ahttp.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akernot <akernot@student.42Adel.org.au>    +#+  +:+       +#+        */
+/*   By: akernot <a1885158@adelaide.edu.au>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 16:04:31 by akernot           #+#    #+#             */
-/*   Updated: 2024/02/22 18:16:45 by akernot          ###   ########.fr       */
+/*   Updated: 2024/03/18 22:07:32 by akernot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "HttpHeaders.hpp"
 
 # include <string>
+# include <istream>
 
 class Ahttp : public HttpHeaders {
 public:
@@ -29,6 +30,9 @@ public:
         std::string getEndl() const;
         void setEndl(std::string endl);
         int getRecipient() const;
+	void readBody(const int fd);
+        void readBody(std::istream& file);
+        int getBodySize() const;
         
 	virtual std::string build() const = 0;
 

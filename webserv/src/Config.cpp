@@ -1,30 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akernot <a1885158@adelaide.edu.au>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/12 17:14:24 by akernot           #+#    #+#             */
-/*   Updated: 2024/03/18 20:50:00 by akernot          ###   ########.fr       */
+/*   Created: 2024/03/18 21:14:28 by akernot           #+#    #+#             */
+/*   Updated: 2024/03/18 21:58:27 by akernot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
+#include "Config.hpp"
 
-#include "WebserverInstance.hpp"
-
-int main()
+bool Config::checkExists(std::string uri)
 {
-	char *emergencyMemory = new char[1028];
-	try {
-		WebserverInstance webserver;
-		webserver.start();
-	} catch (std::bad_alloc&) {
-		delete[] emergencyMemory;
-		std::cerr << "Webserver did not have enough memory to start.\n";
-		return 0;
-	}
-	delete[] emergencyMemory;
-	return 0;
+
+}
+
+bool Config::checkAllowedMethod(std::string uri, methods method)
+{
+
+}
+
+int Config::getAllowedMethods(std::string uri)
+{
+
+}
+
+std::string Config::createPath(std::string uri)
+{
+
+}
+
+bool Config::getAutoIndex(std::string uri)
+{
 }

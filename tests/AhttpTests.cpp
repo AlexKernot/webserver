@@ -6,7 +6,7 @@
 /*   By: akernot <a1885158@adelaide.edu.au>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 17:37:50 by akernot           #+#    #+#             */
-/*   Updated: 2024/03/18 16:50:11 by akernot          ###   ########.fr       */
+/*   Updated: 2024/03/18 17:40:58 by akernot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ TEST(AhttpTests, BasicTests)
 	delete http2;
 }
 
-TEST(AhttpTests, BodyTests)
+TEST(AhttpTests, ReadBodyFromFD)
 {
 	Ahttp *http = new ConcreteHttp();
 	FILE *file = tmpfile();
@@ -75,6 +75,7 @@ TEST(AhttpTests, BodyTests)
 	ASSERT_EQ(http->getMessageBody(), "");
 	std::string message = "Testing";
 	ASSERT_EQ(write(file->_fileno, message.c_str(), message.size()), message.size());
+	fclose(file);
 
 	// Set file position pointer to beginning of temp file
 	rewind(file);

@@ -1,30 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   JsonToken.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akernot <a1885158@adelaide.edu.au>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/12 17:14:24 by akernot           #+#    #+#             */
-/*   Updated: 2024/03/18 20:50:00 by akernot          ###   ########.fr       */
+/*   Created: 2024/05/29 14:21:00 by akernot           #+#    #+#             */
+/*   Updated: 2024/06/08 19:10:58 by akernot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
+#ifndef JSONTOKEN_HPP
+# define JSONTOKEN_HPP
 
-#include "WebserverInstance.hpp"
+#include <istream>
+#include <vector>
+#include <string>
 
-int main()
-{
-	char *emergencyMemory = new char[1028];
-	try {
-		WebserverInstance webserver;
-		webserver.start();
-	} catch (std::bad_alloc&) {
-		delete[] emergencyMemory;
-		std::cerr << "Webserver did not have enough memory to start.\n";
-		return 0;
-	}
-	delete[] emergencyMemory;
-	return 0;
-}
+class JsonToken {
+public:
+	JsonToken(std::string key);
+	JsonToken();
+	
+	JsonToken(JsonToken& copy);
+	JsonToken& operator=(JsonToken& copy);
+	
+	virtual ~JsonToken();
+
+	std::string getKey() const;
+private:
+	std::string key;
+};
+
+#endif // JSONTOKEN_HPP

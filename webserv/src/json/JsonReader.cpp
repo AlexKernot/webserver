@@ -1,30 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   JsonReader.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akernot <a1885158@adelaide.edu.au>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/12 17:14:24 by akernot           #+#    #+#             */
-/*   Updated: 2024/03/18 20:50:00 by akernot          ###   ########.fr       */
+/*   Created: 2024/06/08 20:12:23 by akernot           #+#    #+#             */
+/*   Updated: 2024/06/08 20:35:25 by akernot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
+#include "JsonReader.hpp"
 
-#include "WebserverInstance.hpp"
+#include <stack>
 
-int main()
+JsonObject* JsonReader::read() const
 {
-	char *emergencyMemory = new char[1028];
-	try {
-		WebserverInstance webserver;
-		webserver.start();
-	} catch (std::bad_alloc&) {
-		delete[] emergencyMemory;
-		std::cerr << "Webserver did not have enough memory to start.\n";
-		return 0;
+	JsonObject* object = nullptr;
+	std::string line;
+	while (in.eof() == false) {
+		std::getline(in, line);
 	}
-	delete[] emergencyMemory;
-	return 0;
+	if (in.rdstate() == in.bad()) {
+		std::string error = "File stream encountered error while reading. ";
+		error += "Server configuration may not be valid.";
+		logger.warning(error);
+	}
+	return object;
 }

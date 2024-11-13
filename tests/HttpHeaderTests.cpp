@@ -1,8 +1,6 @@
 #include <gtest/gtest.h>
 
 #include "../webserv/includes/Ahttp.hpp"
-#include "../webserv/includes/HttpRequest.hpp"
-#include "../webserv/includes/HttpResponse.hpp"
 
 /*class MockAhttp : public Ahttp {
 public:

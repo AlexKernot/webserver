@@ -1,30 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   JsonReader.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akernot <a1885158@adelaide.edu.au>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/12 17:14:24 by akernot           #+#    #+#             */
-/*   Updated: 2024/03/18 20:50:00 by akernot          ###   ########.fr       */
+/*   Created: 2024/06/08 16:30:59 by akernot           #+#    #+#             */
+/*   Updated: 2024/06/08 20:12:40 by akernot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
+#ifndef JSONREADER_HPP
+# define JSONREADER_HPP
 
-#include "WebserverInstance.hpp"
+# include <fstream>
 
-int main()
-{
-	char *emergencyMemory = new char[1028];
-	try {
-		WebserverInstance webserver;
-		webserver.start();
-	} catch (std::bad_alloc&) {
-		delete[] emergencyMemory;
-		std::cerr << "Webserver did not have enough memory to start.\n";
-		return 0;
-	}
-	delete[] emergencyMemory;
-	return 0;
-}
+# include "json/JsonObject.hpp"
+# include "Logger.hpp"
+
+class JsonReader {
+public:
+	JsonReader(std::istream& readFrom);
+	JsonReader(std::istream& readFrom, Logger& logger);
+
+	JsonObject* read() const;
+private:
+	std::istream& in;
+	Logger& logger;
+};
+
+#endif // JSONREADER_HPP

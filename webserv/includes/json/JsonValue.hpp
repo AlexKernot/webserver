@@ -1,30 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   JsonValue.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akernot <a1885158@adelaide.edu.au>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/12 17:14:24 by akernot           #+#    #+#             */
-/*   Updated: 2024/03/18 20:50:00 by akernot          ###   ########.fr       */
+/*   Created: 2024/05/31 18:09:48 by akernot           #+#    #+#             */
+/*   Updated: 2024/06/08 19:13:33 by akernot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
+#ifndef JSONVALUE_HPP
+# define JSONVALUE_HPP
 
-#include "WebserverInstance.hpp"
+#include <JsonToken.hpp>
 
-int main()
-{
-	char *emergencyMemory = new char[1028];
-	try {
-		WebserverInstance webserver;
-		webserver.start();
-	} catch (std::bad_alloc&) {
-		delete[] emergencyMemory;
-		std::cerr << "Webserver did not have enough memory to start.\n";
-		return 0;
-	}
-	delete[] emergencyMemory;
-	return 0;
-}
+class JsonValue : public JsonToken {
+public:
+	JsonValue(std::string key, std::string value);
+	void setValue(std::string newValue);
+	std::string getValue() const;
+private:
+	std::string value;
+};
+
+#endif // JSONVALUE_HPP
